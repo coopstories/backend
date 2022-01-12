@@ -1,4 +1,10 @@
 import { GraphQLContext } from '../context'
+import {
+  comparePasswords,
+  createMasterPassword,
+  createNextPassword,
+  hashPassword,
+} from '../utils'
 
 const typeDefs = /* GraphQL */ `
   extend type Query {
@@ -12,7 +18,7 @@ const typeDefs = /* GraphQL */ `
       title: String!
       creator: String!
       content: String!
-    ): NextCollaboratorData!
+    ): StoryCreatedData!
 
     continueStory(
       id: Int!
@@ -23,6 +29,12 @@ const typeDefs = /* GraphQL */ `
     ): NextCollaboratorData!
 
     unlockFullStory(id: Int!, masterPassword: String!): EntireStory!
+  }
+
+  type StoryCreatedData {
+    storyId: Int!
+    nextPassword: String!
+    masterPassword: String!
   }
 
   type NextCollaboratorData {
@@ -109,7 +121,12 @@ const resolvers = {
         throw new Error('Unknown story with ID: ' + args.id)
       }
 
-      if (story.nextPassword !== args.password) {
+      const arePasswordsEqual = await comparePasswords(
+        args.password,
+        story.nextPassword,
+      )
+
+      if (!arePasswordsEqual) {
         throw new Error('Incorrect password')
       }
 
@@ -132,6 +149,12 @@ const resolvers = {
       args: { title: string; creator: string; content: string },
       { prisma }: GraphQLContext,
     ) => {
+      const plainNextPassword = createNextPassword()
+      const nextPassword = await hashPassword(plainNextPassword)
+
+      const plainMasterPassword = createMasterPassword()
+      const masterPassword = await hashPassword(plainMasterPassword)
+
       const { story } = await prisma.storyFragment.create({
         data: {
           story: {
@@ -139,8 +162,8 @@ const resolvers = {
               title: args.title,
               creatorName: args.creator,
 
-              nextPassword: '1',
-              masterPassword: '2',
+              nextPassword,
+              masterPassword,
             },
           },
 
@@ -155,7 +178,8 @@ const resolvers = {
 
       return {
         storyId: story.id,
-        nextPassword: story.nextPassword,
+        nextPassword: plainNextPassword,
+        masterPassword: plainMasterPassword,
       }
     },
 
@@ -183,11 +207,17 @@ const resolvers = {
         throw new Error('Unknown story with ID: ' + args.id)
       }
 
-      if (story.nextPassword !== args.password) {
+      const arePasswordsEqual = await comparePasswords(
+        args.password,
+        story.nextPassword,
+      )
+
+      if (!arePasswordsEqual) {
         throw new Error('Incorrect password')
       }
 
-      const nextPassword = args.password + '1'
+      const plainNextPassword = createNextPassword()
+      const nextPassword = await hashPassword(plainNextPassword)
 
       await prisma.$transaction([
         prisma.story.update({
@@ -206,7 +236,7 @@ const resolvers = {
 
       return {
         storyId: args.id,
-        nextPassword,
+        nextPassword: plainNextPassword,
       }
     },
   },
