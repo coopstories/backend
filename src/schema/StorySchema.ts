@@ -11,6 +11,7 @@ const typeDefs = /* GraphQL */ `
     getPublicStoryData(id: Int!): PublicStoryData!
 
     accessStory(id: Int!, password: String): VisibleStory!
+    accessFullStory(id: Int!, masterPassword: String!): EntireStory!
   }
 
   extend type Mutation {
@@ -27,8 +28,6 @@ const typeDefs = /* GraphQL */ `
       contributor: String!
       content: String!
     ): NextCollaboratorData!
-
-    unlockFullStory(id: Int!, masterPassword: String!): EntireStory!
   }
 
   type StoryCreatedData {
@@ -139,6 +138,49 @@ const resolvers = {
         creatorName: story.creatorName,
         createdAt: story.createdAt,
         previousFragment,
+      }
+    },
+
+    accessFullStory: async (
+      parent: unknown,
+      args: { id: number; masterPassword: string },
+      { prisma }: GraphQLContext,
+    ) => {
+      const story = await prisma.story.findUnique({
+        where: {
+          id: args.id,
+        },
+
+        select: {
+          id: true,
+          title: true,
+          creatorName: true,
+          createdAt: true,
+          masterPassword: true,
+
+          storyFragments: { orderBy: { id: 'desc' } },
+        },
+      })
+
+      if (!story) {
+        throw new Error('Unknown story with ID: ' + args.id)
+      }
+
+      const arePasswordsEqual = await comparePasswords(
+        args.masterPassword,
+        story.masterPassword,
+      )
+
+      if (!arePasswordsEqual) {
+        throw new Error('Incorrect password')
+      }
+
+      return {
+        id: story.id,
+        title: story.title,
+        creatorName: story.creatorName,
+        createdAt: story.createdAt,
+        storyFragments: story.storyFragments,
       }
     },
   },
