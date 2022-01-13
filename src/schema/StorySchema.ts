@@ -157,7 +157,7 @@ const resolvers = {
           createdAt: true,
           masterPassword: true,
 
-          storyFragments: { orderBy: { id: 'desc' } },
+          storyFragments: { orderBy: { id: 'asc' } },
         },
       })
 
