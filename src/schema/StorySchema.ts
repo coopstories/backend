@@ -46,7 +46,6 @@ const typeDefs = /* GraphQL */ `
     title: String!
     creatorName: String!
     createdAt: Date!
-    locked: Boolean
   }
 
   type VisibleStory {
