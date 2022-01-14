@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --exit-child ./src/index.ts",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "heroku-postbuild": "prisma migrate deploy"
   },
   "devDependencies": {},
   "dependencies": {
