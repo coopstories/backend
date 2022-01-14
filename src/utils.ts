@@ -17,3 +17,9 @@ export const comparePasswords = (
 export const createMasterPassword = () => nanoid(21)
 
 export const createNextPassword = () => nanoid(10)
+
+export const getLastWords = (numberWords: number, value: string) => {
+  const words = value.split(/ /g)
+
+  return words.slice(-numberWords).join(' ')
+}

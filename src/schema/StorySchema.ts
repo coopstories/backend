@@ -3,8 +3,11 @@ import {
   comparePasswords,
   createMasterPassword,
   createNextPassword,
+  getLastWords,
   hashPassword,
 } from '../utils'
+
+const PREVIOUS_FRAGMENT_WORDS = 20
 
 const typeDefs = /* GraphQL */ `
   extend type Query {
@@ -76,7 +79,7 @@ const typeDefs = /* GraphQL */ `
 const resolvers = {
   Query: {
     getPublicStoryData: (
-      parent: unknown,
+      _parent: unknown,
       args: { id: number },
       { prisma }: GraphQLContext,
     ) => {
@@ -95,7 +98,7 @@ const resolvers = {
     },
 
     accessStory: async (
-      parent: unknown,
+      _parent: unknown,
       args: { id: number; password: string },
       { prisma }: GraphQLContext,
     ) => {
@@ -128,8 +131,10 @@ const resolvers = {
         throw new Error('Incorrect password')
       }
 
-      // TODO: Cut out the end section of the fragment
-      const previousFragment = story.storyFragments[0].content
+      const previousFragment = getLastWords(
+        PREVIOUS_FRAGMENT_WORDS,
+        story.storyFragments[0].content,
+      )
 
       return {
         id: story.id,
@@ -141,7 +146,7 @@ const resolvers = {
     },
 
     accessFullStory: async (
-      parent: unknown,
+      _parent: unknown,
       args: { id: number; masterPassword: string },
       { prisma }: GraphQLContext,
     ) => {
