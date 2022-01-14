@@ -20,10 +20,15 @@ async function main() {
 
   app.use(express.json())
 
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    }),
+  )
+
   if (process.env.NODE_ENV === 'production') {
     app.use(helmet())
-  } else {
-    app.use(cors())
   }
 
   app.use('/graphql', async (req, res) => {
