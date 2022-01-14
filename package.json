@@ -5,8 +5,8 @@
   "author": "Andres Martin <monkeyandres@protonmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --exit-child src/index.ts",
-    "start": "ts-node src/index.ts"
+    "dev": "ts-node-dev --exit-child ./src/index.ts",
+    "start": "ts-node ./src/index.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
