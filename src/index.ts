@@ -1,6 +1,7 @@
 import 'graphql-import-node'
-
 import express from 'express'
+import helmet from 'helmet'
+import cors from 'cors'
 import {
   getGraphQLParameters,
   processRequest,
@@ -15,6 +16,11 @@ async function main() {
   const app = express()
 
   app.use(express.json())
+  app.use(helmet())
+
+  if (process.env.NODE_ENV === 'development') {
+    app.use(cors())
+  }
 
   app.use('/graphql', async (req, res) => {
     // Create a generic Request object that can be consumed by Graphql Helix's API
