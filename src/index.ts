@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv'
+dotenv.config()
+
 import 'graphql-import-node'
 import express from 'express'
 import helmet from 'helmet'
@@ -16,9 +19,10 @@ async function main() {
   const app = express()
 
   app.use(express.json())
-  app.use(helmet())
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'production') {
+    app.use(helmet())
+  } else {
     app.use(cors())
   }
 
