@@ -33,4 +33,4 @@ This project was made for educational purposes, I wanted to try some new technol
 - GraphQL using [GraphQL-Helix](https://github.com/contra/graphql-helix)
 - [Prisma ORM](https://github.com/prisma/prisma)
 
-If you find anything that could be improved feel free to [open an issue](https://github.com/coopstories/frontend/issues/new) in this same repo.
+If you find anything that could be improved feel free to [open an issue](https://github.com/coopstories/backend/issues/new) in this same repo.
