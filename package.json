@@ -4,9 +4,6 @@
   "main": "index.js",
   "author": "Andres Martin <monkeyandres@protonmail.com>",
   "license": "MIT",
-  "engines": {
-    "node": "16.13.x"
-  },
   "scripts": {
     "dev": "ts-node-dev --exit-child ./src/index.ts",
     "start": "node ./dist/index.js",
