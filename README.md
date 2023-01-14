@@ -26,6 +26,34 @@ yarn dev
 # Open your browser on localhost:4000/graphql to access GraphQLi
 ```
 
+## Deployment
+
+This project is deployed with docker compose and requires you to have it installed locally. Before starting we should have a folder structure like the following one
+
+```
+/coopstories
+  frontend
+  backend
+```
+
+After ensuring the names and structure are the same we need to configure the env vars on [.env.dist](.env.dist).
+
+Before running the stack customize the ports in which the app is going to be exposed, see [docker-compose.yml](docker-compose.yml). Once checked that we are ready to jump into the terminal.
+
+```bash
+# Check if the config is well formatted
+docker compose -p coopstories --env-file .env.dist config
+
+# Run our stack
+docker compose -p coopstories --env-file .env.dist up -d
+
+# Remove the stack
+docker compose -p coopstories --env-file .env.dist down
+
+# Rebuild stack's images (useful while developing)
+docker compose -p coopstories --env-file .env.dist build
+```
+
 ## About the project
 
 This project was made for educational purposes, I wanted to try some new technologies such as:

@@ -8,7 +8,7 @@
     "dev": "ts-node-dev --exit-child ./src/index.ts",
     "start": "node ./dist/index.js",
     "build": "tsc",
-    "postbuild": "prisma migrate deploy",
+    "migrations:deploy": "prisma migrate deploy",
     "migrations:up": "prisma migrate dev"
   },
   "devDependencies": {

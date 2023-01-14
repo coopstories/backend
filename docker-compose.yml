@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        BACKEND_URL: ${PUBLIC_URL}:3001/graphql
+    depends_on:
+      - backend
+    ports:
+      - '3000:80'
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - backoffice
+    ports:
+      - '3001:4000'
+    environment:
+      NODE_ENV: $NODE_ENV
+      FRONTEND_URL: ${PUBLIC_URL}:3000
+      DATABASE_URL: $DATABASE_URL
+
+  database:
+    image: postgres:14
+    restart: always
+    ports:
+      - '3002:5432'
+    networks:
+      - backoffice
+    volumes:
+      - database_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+
+volumes:
+  database_data:
+
+networks:
+  backoffice:
