@@ -6,7 +6,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
       args:
-        BACKEND_URL: ${PUBLIC_URL}:3001/graphql
+        BACKEND_URL: $BACKEND_URL
     depends_on:
       - backend
     ports:
@@ -25,7 +25,7 @@ services:
       - '3001:4000'
     environment:
       NODE_ENV: $NODE_ENV
-      FRONTEND_URL: ${PUBLIC_URL}:3000
+      FRONTEND_URL: $FRONTEND_URL
       DATABASE_URL: $DATABASE_URL
 
   database:
