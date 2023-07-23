@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: ghcr.io/coopstories/backend:f371f327afdca739b828b49c263ba2af40cd86dd
+    image: ghcr.io/coopstories/backend:9d9f58a8089c6d61436d2d0698820ae29665c204
     restart: unless-stopped
     depends_on:
       database:
