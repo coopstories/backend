@@ -11,7 +11,7 @@ services:
 
   backend:
     # TODO: Update this value with latest backend build
-    image: ghcr.io/coopstories/backend:9d9f58a8089c6d61436d2d0698820ae29665c204
+    image: ghcr.io/coopstories/backend:6131b166d253f3a24fcee811944efdc032ff02ec
     restart: unless-stopped
     depends_on:
       database:
