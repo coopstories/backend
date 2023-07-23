@@ -1,49 +1,32 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-      args:
-        BACKEND_URL: $BACKEND_URL
-    depends_on:
-      - backend
-    ports:
-      - '3000:80'
-
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
+    image: ghcr.io/coopstories/backend:f371f327afdca739b828b49c263ba2af40cd86dd
+    restart: unless-stopped
     depends_on:
-      - database
-    networks:
-      - backoffice
-    ports:
-      - '3001:4000'
+      database:
+        condition: service_healthy
+        restart: true
     environment:
-      NODE_ENV: $NODE_ENV
+      PORT: 4000
       FRONTEND_URL: $FRONTEND_URL
-      DATABASE_URL: $DATABASE_URL
+      DATABASE_URL: postgresql://postgres:$DB_PASSWORD@database:5432/coopstories
 
   database:
     image: postgres:14
-    restart: always
-    ports:
-      - '3002:5432'
-    networks:
-      - backoffice
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - coopstories_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: $POSTGRES_DB
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: coopstories
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: $DB_PASSWORD
 
 volumes:
-  database_data:
-
-networks:
-  backoffice:
+  coopstories_data:

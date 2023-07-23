@@ -28,17 +28,9 @@ yarn dev
 
 ## Deployment
 
-This project is deployed with docker compose and requires you to have it installed locally. Before starting we should have a folder structure like the following one
+This project is deployed with docker compose and requires you to have it installed locally.
 
-```
-/coopstories
-  frontend
-  backend
-```
-
-After ensuring the names and structure are the same we need to configure the env vars on [.env.dist](.env.dist).
-
-Before running the stack customize the ports in which the app is going to be exposed, see [docker-compose.yml](docker-compose.yml). Once checked that we are ready to jump into the terminal.
+First thing you need to configure the env vars on [.env.dist](.env.dist). Before running the stack customize the ports in which the app is going to be exposed, see [docker-compose.yml](docker-compose.yml). Once checked that we are ready to jump into the terminal.
 
 ```bash
 # Check if the config is well formatted
