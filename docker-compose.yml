@@ -1,7 +1,16 @@
 version: '3.8'
 
 services:
+  frontend:
+    image: $FRONTEND_IMAGE_TAG
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - 80:80
+
   backend:
+    # TODO: Update this value with latest backend build
     image: ghcr.io/coopstories/backend:9d9f58a8089c6d61436d2d0698820ae29665c204
     restart: unless-stopped
     depends_on:
@@ -12,6 +21,8 @@ services:
       PORT: 4000
       FRONTEND_URL: $FRONTEND_URL
       DATABASE_URL: postgresql://postgres:$DB_PASSWORD@database:5432/coopstories
+    ports:
+      - 4000:4000
 
   database:
     image: postgres:14

@@ -28,9 +28,11 @@ yarn dev
 
 ## Deployment
 
-This project is deployed with docker compose and requires you to have it installed locally.
+This project is deployed with docker compose and requires you to have it installed locally. The repo provides an example [docker-compose.yml](./docker-compose.yml) file of how to run coopstories on your own servers.
 
-First thing you need to configure the env vars on [.env.dist](.env.dist). Before running the stack customize the ports in which the app is going to be exposed, see [docker-compose.yml](docker-compose.yml). Once checked that we are ready to jump into the terminal.
+First, go to the [frontend docs](https://github.com/coopstories/frontend) and build the frontend image specifying the URL where your backend would be hosted.
+
+Second, you need to configure the env vars on [.env.dist](.env.dist). Before running the stack, read the [docker-compose.yml](docker-compose.yml) and adjust the needed values. Once checked, we are ready to jump into the terminal.
 
 ```bash
 # Check if the config is well formatted
